@@ -48,14 +48,14 @@ def decision_node(state: GraphState) -> GraphState:
     
     prompt = ChatPromptTemplate.from_messages([
         ("system", """你是一个流程决策助手。请根据用户的输入判断应该采取什么动作。
-         格式要求为list[str], 比如：["工具1","使用工具2"]。
+         格式要求为list[str], 比如：["工具1","使用工具2"]。没有则输出[],注意符号差异，必须使用 ""  而不是 ''
         {TOOL_LIST_STR}"""),
         ("user", "{input}")
     ])
     
     chain = prompt | llm
     response = chain.invoke({"input": state["input"],"TOOL_LIST_STR": TOOL_LIST_STR})
-    
+    print(response.content)
     next_nodes_list = json.loads(response.content.strip())
     # return {
     #     "input": state["input"],
@@ -156,7 +156,7 @@ def generate_func_node(state: GraphState)-> GraphState:
     return{
         'input': query,
         'output':  result,
-        'next_step': ['end']
+        # 'next_step': ['end']
     }
     
 # 进行医疗实体识别，用于到知识图谱获取内容

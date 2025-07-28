@@ -1,7 +1,10 @@
 #gradio use
 import gradio as gr
 import time
+
+from sympy import use
 from agent import *
+from graph_agent import *
 # def greet(name):
 #     return "Hello " + name + "!"
 # demo = gr.Interface(fn=greet, inputs="text", outputs="text")
@@ -11,13 +14,18 @@ from agent import *
 
 
 
-def process_input(user_text):
+async def process_input(user_text):
     """这个函数就是 Submit 按钮被点击后的回调逻辑。"""
-    agent  = Agent()
-    result = agent.pharmacy_search_function(user_text)
+    # agent  = Agent()
+    # result = agent.pharmacy_search_function(user_text)
+    app = init_graph()
+    print(type(user_text))
+    result = await app.ainvoke({"input":user_text})
     # 对result 这个dict 进行解析
     #result_text = result['result'].replace('\n', '<br>')
-    return result['result']
+    # return result['result']
+
+    return str(result["output"])
 
 demo_interface = gr.Interface(
     fn=process_input,
