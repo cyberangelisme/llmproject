@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/iterator"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 	"github.com/syndtr/goleveldb/leveldb/util"
 )
@@ -123,7 +124,7 @@ func (l *LevelDBWrapper) Close() error {
 //	if err := iter.Error(); err != nil {
 //	    // ... 处理错误 ...
 //	}
-func (l *LevelDBWrapper) NewIterator(slice *util.Range) *leveldb.Iterator {
+func (l *LevelDBWrapper) NewIterator(slice *util.Range) iterator.Iterator {
 	return l.db.NewIterator(slice, nil)
 }
 
