@@ -97,6 +97,7 @@ func buildOptions(opts ...Option) *mapReduceOptions {
 
 func mapReduceWithPanicChan[T, U, V any](source <-chan T, panicChan *onceChan, mapper MapperFunc[T, U], reducer ReducerFunc[U, V], opts ...Option) (val V, err error) {
 	options := buildOptions(opts...)
+
 	// output is used to write the final result
 	output := make(chan V)
 	defer func() {

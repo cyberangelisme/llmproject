@@ -7,14 +7,16 @@ toolchain go1.23.11
 require (
 	github.com/CocaineCong/tangseng v0.1.3
 	github.com/IBM/sarama v1.45.2
+	github.com/RoaringBitmap/roaring v1.5.0
 	github.com/go-ego/gse v0.80.2
+	github.com/orcaman/concurrent-map/v2 v2.0.1
 	github.com/pkg/errors v0.9.1
+	github.com/segmentio/kafka-go v0.4.48
 	github.com/spf13/cast v1.9.2
 	github.com/syndtr/goleveldb v1.0.0
 )
 
 require (
-	github.com/RoaringBitmap/roaring v1.5.0 // indirect
 	github.com/bits-and-blooms/bitset v1.2.0 // indirect
 	github.com/bytedance/sonic v1.9.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
@@ -57,7 +59,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
-	github.com/orcaman/concurrent-map/v2 v2.0.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect

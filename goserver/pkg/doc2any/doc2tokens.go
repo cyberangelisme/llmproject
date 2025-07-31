@@ -32,12 +32,18 @@ func GseCutForBuildIndex(docID int64, content string) ([]*model.Tokenization, er
 	// 调用基础分词函数
 	segments := seg.Segment([]byte(processedContent))
 	tokens := gse.ToSlice(segments, false)
-	tokens_with_docID := make([]*model.Tokenization, len(tokens))
-	for k, v := range tokens {
-		tokens_with_docID[k] = &model.Tokenization{
+	tokens_with_docID := make([]*model.Tokenization, 0)
+	for _, v := range tokens {
+		// 去除首尾空白
+		cleanToken := strings.TrimSpace(v)
+		// 过滤：空字符串、纯空白、长度为0
+		if cleanToken == "" {
+			continue
+		}
+		tokens_with_docID = append(tokens_with_docID, &model.Tokenization{
 			Token: v,
 			DocId: docID,
-		}
+		})
 	}
 	// 在更复杂的实现中，这里可能还会：
 	// - 过滤掉长度小于某值的词

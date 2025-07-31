@@ -11,7 +11,7 @@ import (
 func TestDoc2Tokens(t *testing.T) {
 
 	// read from csv file
-	path := "./movies_data.csv"
+	path := "./movies_metadata.csv"
 	// filename := "movie.csv"
 	contents, err := os.ReadFile(path)
 	if err != nil {

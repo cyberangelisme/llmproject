@@ -10,13 +10,21 @@ import (
 
 // 索引服务
 
-func GenerateIndex() {
-	// mapreduce
+func GenerateIndex(filepaths []string) {
+	// load document
 
-	// store result
+	// spilt row to doc
+
+	// mapreduce to generate inverted index( and send message to kafka to vectorIndex/forwardIndex)
+
+	// store inverted/forward index to leveldb (vectorIndex in Python store,maybe milvus)
+
+	//
+	// waitGroup for all finished, if err ,then retry
 
 }
 
+// after mapreduce finished, store inverted index to leveldb
 func StoreInvertedIndexToLevelDB(invertedIndex cmap.ConcurrentMap[string, *roaring.Bitmap], ldbPath string) (int, error) {
 	if invertedIndex.Keys() == nil {
 		return 0, fmt.Errorf("invertedIndex is nil")
@@ -37,10 +45,8 @@ func StoreInvertedIndexToLevelDB(invertedIndex cmap.ConcurrentMap[string, *roari
 	totalKeysWritten := 0
 	writeErrors := 0
 	fmt.Printf("Starting to write index to LevelDB at %s...\n", ldbPath)
-	for item := range invertedIndex.Items() {
-		key := item.Key
-		bitmap := item.Val
-
+	for key, bitmap := range invertedIndex.Items() {
+		//fmt.Printf("Writing key: %s,bitmap: %v \n", key, bitmap)
 		// 4. 序列化 roaring.Bitmap
 		bitmapBytes, marshalErr := bitmap.MarshalBinary()
 		if marshalErr != nil {
@@ -62,13 +68,26 @@ func StoreInvertedIndexToLevelDB(invertedIndex cmap.ConcurrentMap[string, *roari
 			totalKeysWritten++
 		}
 	}
+	return totalKeysWritten, nil
 
 }
 
-// ForwardIndex 的构建应当是从Kafka 收到消息之后
-func StoreForwardIndexToLevelDB(forwardIndex) {
-}
+// // ForwardIndex 的构建应当是从Kafka 收到消息之后
+// func StoreForwardIndexToLevelDB(docStr string) error {
+// 	// 可以先转为struct 然后存储到mysql
+// 	docStruct, _ := doc2any.Doc2Struct(docStr)
+// 	InsertIndexData := &model.ForwardIndex{
+// 		DocId: string(docStruct.DocId),
+// 		Body:  docStruct.Body,
+// 		Title: docStruct.Title,
+// 	}
+// 	if err := storage.InsertIndexData(InsertIndexData); err != nil {
+// 		log.Fatal("failed to insert IndexData")
+// 		return err
+// 	}
+// 	return nil
+// }
 
-func ReceiveDataFromKafka() {
+// func ReceiveDataFromKafka() {
 
-}
+// }
