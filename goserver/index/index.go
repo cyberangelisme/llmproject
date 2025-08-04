@@ -2,6 +2,7 @@ package index
 
 import (
 	"fmt"
+	"log"
 	"server/storage"
 
 	"github.com/RoaringBitmap/roaring"
@@ -67,6 +68,45 @@ func StoreInvertedIndexToLevelDB(invertedIndex cmap.ConcurrentMap[string, *roari
 		} else {
 			totalKeysWritten++
 		}
+	}
+	return totalKeysWritten, nil
+
+}
+
+func StoreInvertedIndexToRedis(invertedIndex cmap.ConcurrentMap[string, []int], ldbPath string) (int, error) {
+	// config
+	// 初始化 BitmapClient
+	config := storage.Config{
+		Addr:      "localhost:6379",
+		Password:  "123456",
+		DB:        0,
+		Namespace: "inverted_index", // 所有 key 会加上前缀
+	}
+
+	rdb, err := storage.NewBitmapClient(config)
+	if err != nil {
+		log.Fatal("Redis 连接失败:", err)
+	}
+	defer rdb.Close()
+
+	fmt.Println("✅ Redis 连接成功")
+
+	// 2. 初始化计数器和错误计数器
+	totalKeysWritten := 0
+	writeErrors := 0
+	fmt.Printf("Starting to write index to Redis at %s...\n", ldbPath)
+	for key, values := range invertedIndex.Items() {
+		//  插入到 Redis
+		for _, docId := range values {
+			err = rdb.SetBit(key, int64(docId), 1)
+		}
+		if err != nil {
+			writeErrors++
+			fmt.Printf("Error writing key %s to Redis: %v\n", key, err)
+		} else {
+			totalKeysWritten++
+		}
+
 	}
 	return totalKeysWritten, nil
 

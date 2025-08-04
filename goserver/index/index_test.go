@@ -21,6 +21,20 @@ func TestStoreInvertedIndexToLevelDB(t *testing.T) {
 	index.StoreInvertedIndexToLevelDB(cmap_inverted, "./index.ldb")
 }
 
+func TestStoreInvertedIndexToRedis(t *testing.T) {
+	cmap_inverted := mapreduce.MapReduceWithFilePathsToNormalCmap([]string{"./movies_metadata.csv"})
+	index.StoreInvertedIndexToRedis(cmap_inverted, "./index.ldb")
+}
+
+// 读取测试
+func TestReadFromLevelDB(t *testing.T) {
+
+}
+
+func TestFlushRedis(t *testing.T) {
+
+}
+
 // 尝试分割文件
 func TestSpiltData(t *testing.T) {
 	// 输入配置
